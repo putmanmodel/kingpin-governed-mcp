@@ -1,6 +1,6 @@
 # Kingpin governed fixture reader
 
-MCP lets a client discover tools and call them. Kingpin decides whether this server may carry out one particular operation. Call `read_governed_fixture` with `{}` to request the contents of `fixtures/message.txt`. The host owns the path and evaluates each call before entering the reader. A client cannot supply a path, identity, profile or lease through the tool arguments.
+Kingpin is a Node.js MCP tool authorization example demonstrating how the same tool request can be permitted or explicitly refused depending on its authority. Call `read_governed_fixture` with `{}` to request the contents of `fixtures/message.txt`. The host owns the path and evaluates each call before entering the reader. A client cannot supply a path, identity, profile or lease through the tool arguments.
 
 ## Run locally
 
@@ -86,4 +86,6 @@ Kingpin’s software architecture and agent-governance implementation were devel
 
 The [Kingpin Community License v0.1](LICENSE) from Stephen A. Putman permits personal experimentation, coursework, independent noncommercial research and noncommercial forks of the covered integration. You may rename a fork and distribute source or binaries with the license, original attribution and a summary of changes. Commercial use, defined institutional operations and commissioned deliverables require separate written permission. An authorized commercial evaluation may be free. Production and OEM rights require separate agreements. The separately installed runtime retains CC BY-NC 4.0. See [component notices](NOTICE.md).
 
-For technical feedback, include the revision, platform, Node/npm and editor versions, active profile, steps to reproduce, and expected and actual results. Remove private data from logs. Stars, forks, sharing and technical feedback are welcome and voluntary.
+Try reproducing both the normal-profile permitted read and the lease-required refusal. We welcome reports of your operating system and relevant versions, Node.js and npm versions, MCP client or editor, whether both outcomes worked, and any installation difficulties or unexpected behavior. Please omit credentials and private data from logs. [Share feedback on GitHub Issues](https://github.com/putmanmodel/kingpin-governed-mcp/issues).
+
+Stars, forks, sharing and technical feedback are welcome and voluntary.
