@@ -41,6 +41,34 @@ Both `npm test` and `npm run demo` should exit successfully. An installation err
 
 [Report a successful, partial or failed reproduction](https://github.com/putmanmodel/kingpin-governed-mcp/issues/new?template=independent-reproduction.md).
 
+## Install the local npm package candidate
+
+This section applies only to a locally built, reviewed tarball. It does not announce package availability on npm. The GitHub-checkout instructions above remain supported. Use the same Node **24.14.1** and npm **11.11.0**; the qualified platform is macOS on Apple silicon.
+
+From the candidate checkout, build the archive without lifecycle scripts:
+
+```sh
+npm pack --ignore-scripts
+```
+
+Copy the resulting `kingpin-governed-mcp-0.1.0.tgz` to an absolute path of your choice. In a new consumer directory outside the checkout, install it with production dependencies and no lifecycle scripts:
+
+```sh
+mkdir kingpin-consumer
+cd kingpin-consumer
+npm init -y
+npm install --omit=dev --ignore-scripts --registry=https://registry.npmjs.org "/absolute/path/kingpin-governed-mcp-0.1.0.tgz"
+./node_modules/.bin/kingpin-mcp-demo
+```
+
+The demo starts both synthetic profiles and prints the same permitted read and lease-required refusal described above. To connect a stdio MCP client, use the **absolute path** to this consumer directory's `node_modules/.bin/kingpin-mcp` as its command, with `KINGPIN_PROFILE` set to `normal` or `lease-required`. Restart the process after changing profiles. The server's stdout carries MCP protocol only; its diagnostics use stderr. The server and demo locate their packaged modules and fixture relative to their entry files and can be launched from unrelated working directories, including paths with spaces. No write access to the installed package directory is needed to run them.
+
+The published-file allowlist includes the six implementation/demo modules, the exact fixture, this README, LICENSE, NOTICE.md, package.json and npm-shrinkwrap.json. It excludes checkout tests, editor configuration, qualification scripts and evidence. `npm test` and the supplied relative-path `.mcp.json` are checkout workflows, not installed-package commands. The executable names are `kingpin-mcp` and `kingpin-mcp-demo`.
+
+The manifest pins all 15 packages already present in the qualified dependency tree, including the 11 transitive dependencies, as application distribution constraints. This adds no packages and changes no dependency versions. The four implementation/demo imports remain the MCP client and server, Kingpin runtime and Zod. These exact constraints are needed for this local tarball workflow: npm 11.11.0 did not discover a packaged shrinkwrap when installing a local tarball, and otherwise selected newer transitive versions. An internal `_hasShrinkwrap` marker was also ineffective and is not included. Use a fresh, dedicated consumer directory; the qualification compares both installed versions/integrities and module resolution against the approved tree. Installing into an existing dependency graph, adding other dependencies later or applying consumer overrides requires requalification: npm hoisting can cause the MCP client to resolve a different transitive version even while the application itself resolves its pinned copy.
+
+`npm-shrinkwrap.json` replaces package-lock.json as the distributable dependency snapshot and the checkout lock used by `npm ci --include=dev --ignore-scripts`. Its presence alone is **not** a guarantee that a local tarball installer will honor it. It records registry locations and integrity values without bundling dependencies: installation still needs registry access or a populated npm cache. Keep the tarball hash and consumer lockfile with a reproduction report; the version alone does not identify this local candidate. The manifest's exact Node/npm engine versions are advisory unless the installer enforces them. Other package managers, Node/npm versions, operating systems, architectures, global installation, registry publication and registry-based installation remain unqualified. npm 12 removed shrinkwrap support, including its use as a checkout lock; this workflow specifically requires npm 11.11.0. Dependency updates require explicit requalification. Component licenses remain separate as described in LICENSE and NOTICE.md; npm metadata uses `SEE LICENSE IN LICENSE` for the integration's custom license.
+
 ## Optional AI-assisted quick start
 
 Open the repository in your coding assistant and paste this prompt:
