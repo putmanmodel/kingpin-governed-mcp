@@ -2,6 +2,27 @@
 
 Kingpin is a source-available, noncommercial Node.js MCP developer preview. Reproduce two behaviors with `read_governed_fixture` and `{}`: a permitted read of `fixtures/message.txt` under `normal`, and an explicit refusal without bytes under `lease-required`. The host owns the path and evaluates each call before entering the reader; tool arguments cannot supply a path, identity, profile or lease.
 
+## Install the npm developer preview
+
+[`kingpin-governed-mcp@0.1.0`](https://www.npmjs.com/package/kingpin-governed-mcp/v/0.1.0) is published on the official npm registry under `preview`. On November 23, 2026, the registry archive matched the qualified SHA-256 `c61c196392d46dc566123515b2f1a5d70970233dc46faa9212fc66bceb8d56ae`; a fresh registry installation passed all 12 installed-artifact tests. This GitHub README includes post-publication instructions; these additions are not part of the immutable `0.1.0` archive, whose README describes the earlier local-tarball workflow.
+
+Verified environment: **macOS 26.6.2 / Darwin 25.6.0, Apple silicon (arm64), Node 24.14.1, npm 11.11.0**, using a fresh, dedicated consumer directory. Review [Rights and feedback](#rights-and-feedback) before evaluating. Outside any existing project or checkout, run:
+
+```sh
+mkdir kingpin-preview-consumer
+cd kingpin-preview-consumer
+npm init -y
+npm install --omit=dev --ignore-scripts --registry=https://registry.npmjs.org kingpin-governed-mcp@preview
+npm ls kingpin-governed-mcp
+./node_modules/.bin/kingpin-mcp-demo
+```
+
+The verified version is `0.1.0`; `preview` is a movable tag. Retain the consumer lockfile and installed version for reproduction, or select `kingpin-governed-mcp@0.1.0` explicitly. As of November 23, 2026, the registry also assigns `latest` to `0.1.0`; use `@preview` explicitly rather than treating that tag as a stability claim.
+
+For a stdio MCP client, set its command to the **absolute path** of this consumer's `node_modules/.bin/kingpin-mcp`, with `KINGPIN_PROFILE=normal` or `KINGPIN_PROFILE=lease-required` in its environment. Restart after changing profiles. The server waits for MCP requests on stdin and reserves stdout for the protocol; diagnostics go to stderr. Call `read_governed_fixture` with `{}`. The demo exercises both profiles: `normal` returns the exact 19-byte fixture with `isError: false`; `lease-required` returns `gate_2_requires_valid_lease`, `isError: true`, and no bytes. Both executable entry points work from unrelated directories, including paths with spaces.
+
+Qualification covers this dedicated-consumer registry installation and the existing source/local-tarball workflows. Other operating systems, architectures, Node/npm versions, package managers, global installation and remote transports remain unverified. Existing mixed dependency graphs, later dependency additions and overrides require requalification. The profiles remain synthetic demonstrations, with no end-user identity verification or externally issued leases; see [Scope and adaptation](#scope-and-adaptation).
+
 ## Run locally
 
 Use Node **24.14.1** and npm **11.11.0**, with Git available. The reference environment is macOS on Apple silicon. Other operating systems, architectures, Node/npm versions and remote transports are unverified. The command-line demo needs no Copilot account. Review [Rights and feedback](#rights-and-feedback) before evaluating.
@@ -43,9 +64,9 @@ Both `npm test` and `npm run demo` should exit successfully. An installation err
 
 ## Install the local npm package candidate
 
-This section applies only to a locally built, reviewed tarball. It does not announce package availability on npm. The GitHub-checkout instructions above remain supported. Use the same Node **24.14.1** and npm **11.11.0**; the qualified platform is macOS on Apple silicon.
+This section retains the local-tarball reproduction workflow. For the published package, use the registry instructions above. The GitHub-checkout instructions above remain supported. Use the same Node **24.14.1** and npm **11.11.0**; the qualified platform is macOS on Apple silicon.
 
-From the candidate checkout, build the archive without lifecycle scripts:
+For the original packaging source, use candidate commit `a0ebce3fddaff43a328361de44b9b651c13a5021`. From that checkout, build the archive without lifecycle scripts. A newly packed archive must be hashed and compared before claiming the reviewed artifact identity; packing this updated GitHub README produces a different artifact:
 
 ```sh
 npm pack --ignore-scripts
@@ -67,7 +88,7 @@ The published-file allowlist includes the six implementation/demo modules, the e
 
 The manifest pins all 15 packages already present in the qualified dependency tree, including the 11 transitive dependencies, as application distribution constraints. This adds no packages and changes no dependency versions. The four implementation/demo imports remain the MCP client and server, Kingpin runtime and Zod. These exact constraints are needed for this local tarball workflow: npm 11.11.0 did not discover a packaged shrinkwrap when installing a local tarball, and otherwise selected newer transitive versions. An internal `_hasShrinkwrap` marker was also ineffective and is not included. Use a fresh, dedicated consumer directory; the qualification compares both installed versions/integrities and module resolution against the approved tree. Installing into an existing dependency graph, adding other dependencies later or applying consumer overrides requires requalification: npm hoisting can cause the MCP client to resolve a different transitive version even while the application itself resolves its pinned copy.
 
-`npm-shrinkwrap.json` replaces package-lock.json as the distributable dependency snapshot and the checkout lock used by `npm ci --include=dev --ignore-scripts`. Its presence alone is **not** a guarantee that a local tarball installer will honor it. It records registry locations and integrity values without bundling dependencies: installation still needs registry access or a populated npm cache. Keep the tarball hash and consumer lockfile with a reproduction report; the version alone does not identify this local candidate. The manifest's exact Node/npm engine versions are advisory unless the installer enforces them. Other package managers, Node/npm versions, operating systems, architectures, global installation, registry publication and registry-based installation remain unqualified. npm 12 removed shrinkwrap support, including its use as a checkout lock; this workflow specifically requires npm 11.11.0. Dependency updates require explicit requalification. Component licenses remain separate as described in LICENSE and NOTICE.md; npm metadata uses `SEE LICENSE IN LICENSE` for the integration's custom license.
+`npm-shrinkwrap.json` replaces package-lock.json as the distributable dependency snapshot and the checkout lock used by `npm ci --include=dev --ignore-scripts`. Its presence alone is **not** a guarantee that a local tarball installer will honor it. It records registry locations and integrity values without bundling dependencies: installation still needs registry access or a populated npm cache. Keep the tarball hash and consumer lockfile with a reproduction report; the version alone does not identify this local candidate. The manifest's exact Node/npm engine versions are advisory unless the installer enforces them. Other package managers, Node/npm versions, operating systems, architectures and global installation remain unqualified. Registry publication and a fresh dedicated-consumer registry installation of the exact `0.1.0` archive were subsequently verified in the environment stated above. npm 12 removed shrinkwrap support, including its use as a checkout lock; this workflow specifically requires npm 11.11.0. Dependency updates require explicit requalification. Component licenses remain separate as described in LICENSE and NOTICE.md; npm metadata uses `SEE LICENSE IN LICENSE` for the integration's custom license.
 
 ## Optional AI-assisted quick start
 
