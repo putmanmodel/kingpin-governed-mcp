@@ -1,1 +1,56 @@
-{"name":"kingpin-governed-mcp","version":"0.1.0","private":true,"type":"module","engines":{"node":"24.14.1"},"scripts":{"test":"node --test","demo":"node demo.mjs"},"dependencies":{"kingpin-runtime":"0.1.0-rc.4","@modelcontextprotocol/server":"2.4.0","zod":"4.6.7"},"devDependencies":{"@modelcontextprotocol/client":"2.4.0"}}
+{
+  "name": "kingpin-governed-mcp",
+  "version": "0.1.0",
+  "description": "Kingpin governed fixture reader MCP developer preview",
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/putmanmodel/kingpin-governed-mcp.git"
+  },
+  "type": "module",
+  "engines": {
+    "node": "24.14.1",
+    "npm": "11.11.0"
+  },
+  "bin": {
+    "kingpin-mcp": "server.mjs",
+    "kingpin-mcp-demo": "demo.mjs"
+  },
+  "files": [
+    "package.json",
+    "npm-shrinkwrap.json",
+    "README.md",
+    "LICENSE",
+    "NOTICE.md",
+    "server.mjs",
+    "demo.mjs",
+    "host.mjs",
+    "enforce.mjs",
+    "profiles.mjs",
+    "read-fixture.mjs",
+    "fixtures/message.txt"
+  ],
+  "scripts": {
+    "test": "node --test acceptance.test.mjs mcp.test.mjs",
+    "demo": "node demo.mjs",
+    "test:installed": "node --test packaging/installed.test.mjs",
+    "test:negative": "node packaging/negative-controls.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/client": "2.4.0",
+    "@modelcontextprotocol/core": "2.4.0",
+    "@modelcontextprotocol/server": "2.4.0",
+    "cross-spawn": "7.0.6",
+    "eventsource": "3.0.7",
+    "eventsource-parser": "3.1.1",
+    "isexe": "2.0.0",
+    "jose": "6.2.17",
+    "kingpin-runtime": "0.1.0-rc.4",
+    "path-key": "3.1.1",
+    "pkce-challenge": "5.0.1",
+    "shebang-command": "2.0.0",
+    "shebang-regex": "3.0.0",
+    "which": "2.0.2",
+    "zod": "4.6.7"
+  }
+}
